@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AppResearchRecord",
+  "type": "object",
+  "required": [
+    "id", "app", "category", "description", "auth_methods",
+    "access", "gate_type", "api_surface", "mcp_status",
+    "buildability", "blocker", "evidence", "confidence"
+  ],
+  "properties": {
+    "id": { "type": "integer", "description": "1-100, matches source list order" },
+    "app": { "type": "string" },
+    "category": { "type": "string", "description": "One of the 10 source categories" },
+    "description": { "type": "string", "description": "One-line description of what it does" },
+    "auth_methods": {
+      "type": "array",
+      "items": { "enum": ["OAuth2", "API Key", "Basic Auth", "Bearer Token", "Session/Cookie", "Other", "Unknown"] },
+      "description": "Can list multiple; first item = primary"
+    },
+    "access": {
+      "enum": ["self-serve-free", "self-serve-trial", "paid-plan-required", "admin-approval", "partnership-gated", "unclear"]
+    },
+    "gate_type": { "type": "string", "description": "Free text: the specific mechanism, e.g. 'requires Enterprise plan', 'contact sales', 'app review process'" },
+    "api_surface": {
+      "type": "object",
+      "properties": {
+        "style": { "enum": ["REST", "GraphQL", "REST+GraphQL", "RPC/other", "none-public", "unknown"] },
+        "breadth": { "enum": ["narrow (<10 endpoints)", "moderate", "broad", "unknown"] },
+        "docs_quality": { "enum": ["excellent", "good", "sparse", "poor/none"] }
+      }
+    },
+    "mcp_status": {
+      "enum": ["official-mcp", "unofficial-mcp-exists", "none-found"]
+    },
+    "buildability": { "enum": ["yes", "partial", "no"] },
+    "blocker": { "type": "string", "description": "Empty string if buildability=yes" },
+    "evidence": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" },
+      "description": "Direct doc URLs backing the claims above"
+    },
+    "confidence": { "enum": ["verified", "inferred", "low-confidence"] },
+    "notes": { "type": "string" }
+  }
+}
